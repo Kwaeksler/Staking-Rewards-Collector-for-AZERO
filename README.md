@@ -1,7 +1,7 @@
 <a name="English"/><br />
 # Staking-Rewards-Collector for Aleph Zero
 Go to german installation guide: [GER](#German)  
-### Inhaltsverzeichnis
+### Table of contents
 1. [Description](#Description)  
 2. [Requirements](#Requirements)
 3. [Installation](#InstallationEN)
