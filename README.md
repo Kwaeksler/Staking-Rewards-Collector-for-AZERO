@@ -21,18 +21,32 @@ The Staking-Rewards-Collector creates a report (JSON file) with all staking rewa
 <a name="Requirements"/><br />
 
 ## Requirements
+The Staking-Rewards-Collector is written in Pyhton. Pyhton must be installed on the end device to run:
+### Python - Installation
+#### MS Windows 10
+Download Python3: `https://www.python.org/downloads`<br />
+Launch the installer - Important:<br />
+Activate the checkmark at `Add Python3 to PATH`<br />
+Disable the maximum path length after the installation by clicking `Disable path length limit`<br />
+#### MacOS (Monterey)
+Here is a guide for the installation:
+`https://techsviewer.com/how-to-install-python-on-mac`
 
-#### Python - Installation
-The Staking-Rewards-Collector is written in Pyhton. Phyton must be installed on the end device to run:
-`https://www.python.org/downloads`
-
-#### Python - Packages
-For the HTTP/HTTPS queries the Pyhton package "Requests" is additionally required, installation under Windows:
+<br /><br />
+### Python - Packages
+Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt.
+#### MS Windows 10
 ```
 WIN + R
 cmd.exe
 pip install requests
 ```
+#### MacOS (Monterey)
+```
+Open Terminal
+pip3 install requests
+```
+
 <a name="InstallationEN"/><br />
 
 ## Installation of the Staking-Rewards-Collector
@@ -73,9 +87,14 @@ Debug | `True` <br /> `False` | *`True:` The terminal window remains open after 
 <a name="Execution"/><br />
 
 ## Execution
-The program can be executed by double-clicking on the file `StakingAzero.py`. 
+#### MS Windows 10
+If the PATH variable is set correctly, the program can be executed by double-clicking on the file `StakingAzero.py`
 <br />
 Alternatively via command line: `py StakingAzero.py`
+#### MacOS (Monterey)
+Right click on the file `StakingAzero.py` > `Open with ...` > `Python Launcher 3`
+<br />
+Alternatively via command line: `python3 StakingAzero.py`
 
 <a name="ExcelImplementation"/><br />
 
@@ -131,18 +150,32 @@ Der Staking-Rewards-Collector erstellt ein Report (JSON-Datei) mit allen Staking
 <a name="Voraussetzungen"/><br />
 
 ## Voraussetzungen
+Der Staking-Rewards-Collector ist in Pyhton programmiert, Python muss zur Ausführung auf dem Endgerät installiert sein.
+### Python - Installation
+#### MS Windows 10
+Download Python3: `https://www.python.org/downloads`<br />
+Starte den Installer - Wichtig:<br />
+Aktiviere den Haken bei `Add Python3 to PATH`<br />
+Deaktivere nach der Installation die maximale Pfadlänge durch klicken auf `Disable path length limit`<br />
+#### MacOS (Monterey)
+Hier eine Anleitung für die Installation:
+`https://techsviewer.com/how-to-install-python-on-mac`
 
-#### Python - Installation
-Der Staking-Rewards-Collector ist in Pyhton programmiert, Phyton muss zur Ausführung auf dem Endgerät installiert sein:
-`https://www.python.org/downloads`
-
-#### Python - Packages
-Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt, Installation unter Windows:
+<br /><br />
+### Python - Packages
+Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt.
+#### MS Windows 10
 ```
 WIN + R
 cmd.exe
 pip install requests
 ```
+#### MacOS (Monterey)
+```
+Open Terminal
+pip3 install requests
+```
+
 <a name="Installation"/><br />
 
 ## Installation des Staking-Rewards-Collectors
@@ -183,9 +216,15 @@ Debug | `True` <br /> `False` | *`True:` Das Terminal-Fenster bleibt nach Beendi
 <a name="Ausführung"/><br />
 
 ## Ausführung
-Das Programm kann durch einen Doppelklick auf die Datei `StakingAzero.py` ausgeführt werden. 
+#### MS Windows 10
+Wenn die PATH-Variable korrekt gesetzt wurde, kann das Programm durch einen Doppelklick auf die Datei `StakingAzero.py` ausgeführt werden. 
 <br />
 Alternativ über die Kommandozeile: `py StakingAzero.py`
+#### MacOS (Monterey)
+Rechtsklick auf die Datei `StakingAzero.py` > `Öffnet mit ...` > `Python Launcher 3`
+<br />
+Alternativ über die Kommandozeile: `python3 StakingAzero.py`
+
 
 <a name="ExcelImplementierung"/><br />
 
