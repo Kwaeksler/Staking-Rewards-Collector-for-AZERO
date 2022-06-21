@@ -9,6 +9,7 @@ Go to german installation guide: [GER](#German)
 5. [Execution](#Execution)
 6. [Implementation in MS Excel (Office365)](#ExcelImplementation)
 7. [Refresh Data](#RefreshData)
+8. [Automatization](#Automatization)
 
  
 <a name="Description"/><br />
@@ -123,6 +124,15 @@ Running the `StakingAzero.py` file will update the .JSON file.
 <br />
 Then, in Microsoft Excel, the previously inserted table can be updated via `Data` > `Update all`.
 
+<a name="Automatization"/><br />
+
+## Automatization
+The query to Subscan.io as well as the update of the data in MS Excel can be fully automated. In the query properties in MS Excel, the checkbox `Update when file is opened` can be set for this purpose:
+
+![grafik](https://user-images.githubusercontent.com/22911401/174743096-604c6803-a9d5-474f-8229-74dd331328eb.png)
+
+The automatic execution of the script can be implemented under Windows via the task scheduling: e.g. with a trigger on the user logon.
+
 <br />
 <hr style="border:2px solid gray">
 <br /><br /><br /><br />
@@ -138,6 +148,7 @@ Go to english installation guide: [ENG](#English)
 5. [Ausführung](#Ausführung)
 6. [Implementierung in MS Excel (Office365)](#ExcelImplementierung)
 7. [Daten aktualisieren](#DatenAktualisieren)
+8. [Automatisierung](#Automatisierung)
 
  
 <a name="Beschreibung"/><br />
@@ -252,4 +263,14 @@ Der Dialog kann durch Klick auf die Schaltfläche `Schließen & laden` beendet w
 Durch das Ausführen der `StakingAzero.py`-Datei wird die .JSON-Datei aktualisiert. 
 <br />
 Anschließend kann in Microsoft Excel die vorher eingefügte Tabelle über `Daten` > `Alle Aktualisieren` aktualisiert werden.
+
+<a name="Automatisierung"/><br />
+
+## Automatisierung
+Die Abfrage an Subscan.io sowie die Aktualisierung der Daten in MS Excel lässt sich vollständig automatisieren. In den Abfrage-Eigenschaften in MS Excel kann beispielsweise der Haken bei `Aktualisieren beim Öffnen der Datei` gesetzt werden:
+
+![grafik](https://user-images.githubusercontent.com/22911401/174743096-604c6803-a9d5-474f-8229-74dd331328eb.png)
+
+Die automatische Ausführung des Proramms kann unter Windows beispielsweise über die Aufgabenplanung umgesetzt werden: z.B. mit einem Trigger auf die Benutzeranmeldung.
+
 
