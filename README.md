@@ -35,7 +35,8 @@ Here is a guide for the installation:
 
 <br /><br />
 ### Python - Packages
-Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt.
+For the HTTP/HTTPS requests, the Pyhton package "Requests" is also required.
+
 #### MS Windows 10
 ```
 WIN + R
