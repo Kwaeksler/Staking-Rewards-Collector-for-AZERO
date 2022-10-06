@@ -27,7 +27,7 @@ Only_Updates = True         # Possible values: True or False
 Debug = True                # Possible values: True or False
 ###############################################################################
 
-### Check variables
+### Check Configuration
 if not (Prices == 'Fast' or Prices == 'Accurate' or Prices == 'No'):
     print(f"\nFehler: Der Wert der Variable 'Prices' muss 'Fast', 'Accurate' oder 'No' sein - Das Programm wurde beendet!\n")
     if Debug == True:
@@ -67,7 +67,6 @@ rewards_json = r.json()
 
 ### Check HTTPS-Request to Subscan.io
 if r.ok is not True:
-    # print("-------------------------------------------------------------------------------")
     print(f"Fehler: Verbindungsaufbau mit Subscan.io nicht möglich (Error-Code: {r.status_code}) - Das Programm wurde beendet!\n")
     if Debug == True:
         print("-------------------------------------------------------------------------------")
@@ -76,7 +75,6 @@ if r.ok is not True:
     exit()
 elif rewards_json['message'] == 'Success':
     print("Status: Verbindungsaufbau mit Subscan.io war erfolgreich\n")
-
 
 ### This is where the magic happens :-) #######################################
 fileexists = os.path.exists(File_Name)
@@ -97,12 +95,99 @@ if Only_Updates == True and fileexists == True:
     if reward_diff > 0:
         if reward_diff > 1:
             print(f"Status: Es sind {reward_diff} neue Datensätze vorhanden, Informationen werden abgerufen\n")
+            if reward_diff > 100:
+                queries = reward_diff // 10
+                remainder = reward_diff-(queries*10)
+
+                if remainder > 0:
+                    queries=queries+1
+
+                maxentries = queries*10                
+                page = queries - 1
+                RewardID = reward_count - maxentries + 1
+
+                while queries > 0: # > 0
+                    page = queries - 1
+                    payload = '{"row": 10, "page": ' + str(page) + ', "address": "' + Wallet_Address + '"}'
+                    r = requests.post(URL, headers=headers, data=payload)
+                    rewards_json = r.json()
+
+                    ########## CHECK STATUS ##########
+                    if r.ok is not True:
+                        if r.status_code == 429:
+                            print("-------------------------------------------------------------------------------")
+                            print(f"Status: Zu viele API-Anfragen bei Subscan.io - Skript wird für {r.headers['Retry-After']} Sekunde(n) pausiert und anschließend fortgesetzt ...")
+                            print("-------------------------------------------------------------------------------\n")
+                            time.sleep(int(r.headers["Retry-After"]))
+
+                            r = requests.post(URL, headers=headers, data=payload)
+                            rewards_json = r.json()
+                        else:
+                            print(f"Fehler: Verbindungsaufbau mit Subscan.io nicht möglich (Error-Code: {r.status_code}) - Das Programm wurde beendet!\n")
+                            if Debug == True:
+                                print("-------------------------------------------------------------------------------")
+                                print("\nDrücke 'Enter', um das Fenster zu schließen ...")
+                                input()
+                            exit()
+                    elif rewards_json['message'] == 'Success':
+                        print("Status: Verbindungsaufbau mit Subscan.io war erfolgreich\n")
+
+                    entries = len(rewards_json['data']['list'])        
+                     
+                    while entries > 0:
+                        if RewardID > lastID:
+                            reward_amount = rewards_json['data']['list'][entries-1]['amount']
+                            reward_amount = int(reward_amount)
+                            reward_amount = checkAmount(reward_amount)
+                            reward_timestamp_unix = rewards_json['data']['list'][entries-1]['block_timestamp']
+                            reward_timestamp_dt = datetime.fromtimestamp(reward_timestamp_unix)
+                            reward_block = rewards_json['data']['list'][entries-1]['block_num']
+                            reward_eventid = rewards_json['data']['list'][entries-1]['event_idx']
+                            reward_hash = rewards_json['data']['list'][entries-1]['extrinsic_hash']
+                            reward_url = f"https://alephzero.subscan.io/extrinsic/{reward_block}-1?event={reward_block}-{reward_eventid}"
+                            
+                            ### Get prices, if desired
+                            if (Prices == 'Fast' or Prices == 'Accurate'):
+                                if Prices == 'Fast':
+                                    datum = reward_timestamp_dt
+                                    datum = datum.strftime('%d-%m-%Y')
+                                    usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                                    azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                                    print(f"Status: 'Einfache' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                                else:
+                                    usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
+                                    azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
+                                    print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                            else:
+                                usdt = 0
+                                azero = 0
+                                print(f"Status: Es wurden keine Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} abgefragt\n")
+
+                            data = {
+                                'ID': RewardID,
+                                'Amount': reward_amount,
+                                'Date': reward_timestamp_dt,
+                                'AZERO/USDT': azero,
+                                'USDT/EUR': usdt,
+                                'Block': reward_block,
+                                'EventID': reward_eventid,
+                                'HASH': reward_hash,
+                                'URL': reward_url
+                            }
+
+                            results.append(data)
+
+                        RewardID = RewardID + 1
+                        entries = entries -1
+
+                    page = page - 1
+                    queries = queries - 1
         else:
             print(f"Status: Es ist ein neuer Datensatz vorhanden, Informationen werden abgerufen\n")
     else:
         em = 1
 
-    while data_id >= 0:
+    while data_id >= 0 and reward_diff <= 100:
         ### Get needed information from the Subscan-Request and format
         reward_amount = rewards_json['data']['list'][data_id]['amount']
         reward_amount = int(reward_amount)
@@ -149,61 +234,146 @@ if Only_Updates == True and fileexists == True:
         data_id = data_id - 1
 
 else:
+    ### If 'Only_Updates' is set to False or the file does not exists
     if Only_Updates == True and fileexists == False:
         print(f"Status: Die Datei ({File_Name}) existiert nicht, 'Only-Update'-Modus nicht möglich\n")
     if Only_Updates == False and fileexists == True:
         os.remove(File_Name) 
         print("Status: Bestehende Datei wurde gelöscht, da der 'Only-Update'-Modus deaktiviert ist - Der gesamte Staking-Verlauf wird neu erstellt\n")
-
-    ### If 'Only_Updates' is set to False or the file does not exists
+    
     i = 0
     results = []
     reward_count = rewards_json['data']['count']
 
-    while i < reward_count:
-        ### Get needed information from the Subscan-Request and format
-        reward_amount = rewards_json['data']['list'][i]['amount']
-        reward_amount = int(reward_amount)
-        reward_amount = checkAmount(reward_amount)
-        reward_timestamp_unix = rewards_json['data']['list'][i]['block_timestamp']
-        reward_timestamp_dt = datetime.fromtimestamp(reward_timestamp_unix)
-        reward_block = rewards_json['data']['list'][i]['block_num']
-        reward_eventid = rewards_json['data']['list'][i]['event_idx']
-        reward_hash = rewards_json['data']['list'][i]['extrinsic_hash']
-        reward_url = f"https://alephzero.subscan.io/extrinsic/{reward_block}-1?event={reward_block}-{reward_eventid}"
+    if reward_count > 100:
+        queries = reward_count // 10
+        remainder = reward_count-(queries*10)
+        RewardID = 1
 
-        ### Get prices, if desired
-        if (Prices == 'Fast' or Prices == 'Accurate'):
-            if Prices == 'Fast':
-                datum = reward_timestamp_dt
-                datum = datum.strftime('%d-%m-%Y')
-                usdt = getSimpleHistoryPrice('tether', datum, 'eur')
-                azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
-                print(f"Status: 'Einfache' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
+        if remainder > 0:
+            queries=queries+1
+
+        while queries > 0:         
+            page = queries - 1
+            payload = '{"row": 10, "page": ' + str(page) + ', "address": "' + Wallet_Address + '"}'
+
+            r = requests.post(URL, headers=headers, data=payload)
+            rewards_json = r.json()
+
+            ########## CHECK STATUS ##########
+            if r.ok is not True:
+                if r.status_code == 429:
+                    print("-------------------------------------------------------------------------------")
+                    print(f"Status: Zu viele API-Anfragen bei Subscan.io - Skript wird für {r.headers['Retry-After']} Sekunde(n) pausiert und anschließend fortgesetzt ...")
+                    print("-------------------------------------------------------------------------------\n")
+                    time.sleep(int(r.headers["Retry-After"]))
+
+                    r = requests.post(URL, headers=headers, data=payload)
+                    rewards_json = r.json()
+                else:
+                    print(f"Fehler: Verbindungsaufbau mit Subscan.io nicht möglich (Error-Code: {r.status_code}) - Das Programm wurde beendet!\n")
+                    if Debug == True:
+                        print("-------------------------------------------------------------------------------")
+                        print("\nDrücke 'Enter', um das Fenster zu schließen ...")
+                        input()
+                    exit()
+            elif rewards_json['message'] == 'Success':
+                print("Status: Abfrage der Reward-Informationen bei Subscan.io war erfolgreich\n")
+
+            entries = len(rewards_json['data']['list'])            
+            while entries > 0:
+                reward_amount = rewards_json['data']['list'][entries-1]['amount']
+                reward_amount = int(reward_amount)
+                reward_amount = checkAmount(reward_amount)
+                reward_timestamp_unix = rewards_json['data']['list'][entries-1]['block_timestamp']
+                reward_timestamp_dt = datetime.fromtimestamp(reward_timestamp_unix)
+                reward_block = rewards_json['data']['list'][entries-1]['block_num']
+                reward_eventid = rewards_json['data']['list'][entries-1]['event_idx']
+                reward_hash = rewards_json['data']['list'][entries-1]['extrinsic_hash']
+                reward_url = f"https://alephzero.subscan.io/extrinsic/{reward_block}-1?event={reward_block}-{reward_eventid}"
+
+                ### Get prices, if desired
+                if (Prices == 'Fast' or Prices == 'Accurate'):
+                    if Prices == 'Fast':
+                        datum = reward_timestamp_dt
+                        datum = datum.strftime('%d-%m-%Y')
+                        usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                        azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                        print(f"Status: 'Einfache' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                    else:
+                        usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
+                        azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
+                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                else:
+                    usdt = 0
+                    azero = 0
+                    print(f"Status: Es wurden keine Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} abgefragt\n")
+
+                data = {
+                    'ID': RewardID,
+                    'Amount': reward_amount,
+                    'Date': reward_timestamp_dt,
+                    'AZERO/USDT': azero,
+                    'USDT/EUR': usdt,
+                    'Block': reward_block,
+                    'EventID': reward_eventid,
+                    'HASH': reward_hash,
+                    'URL': reward_url
+                }
+
+                results.append(data)
+                
+                RewardID = RewardID + 1 
+                entries = entries -1
+
+            page = page - 1
+            queries = queries - 1
+    
+    else: 
+        while i < reward_count:
+            ### Get needed information from the Subscan-Request and format
+            reward_amount = rewards_json['data']['list'][i]['amount']
+            reward_amount = int(reward_amount)
+            reward_amount = checkAmount(reward_amount)
+            reward_timestamp_unix = rewards_json['data']['list'][i]['block_timestamp']
+            reward_timestamp_dt = datetime.fromtimestamp(reward_timestamp_unix)
+            reward_block = rewards_json['data']['list'][i]['block_num']
+            reward_eventid = rewards_json['data']['list'][i]['event_idx']
+            reward_hash = rewards_json['data']['list'][i]['extrinsic_hash']
+            reward_url = f"https://alephzero.subscan.io/extrinsic/{reward_block}-1?event={reward_block}-{reward_eventid}"
+
+            ### Get prices, if desired
+            if (Prices == 'Fast' or Prices == 'Accurate'):
+                if Prices == 'Fast':
+                    datum = reward_timestamp_dt
+                    datum = datum.strftime('%d-%m-%Y')
+                    usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                    azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                    print(f"Status: 'Einfache' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
+                else:
+                    usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
+                    azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
+                    print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
             else:
-                usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
-                azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
-                print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
-        else:
-            usdt = 0
-            azero = 0
-            print(f"Status: Es wurden keine Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} abgefragt\n")
+                usdt = 0
+                azero = 0
+                print(f"Status: Es wurden keine Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} abgefragt\n")
 
-        ### Format the data for the JSON-File
-        data = {
-            'ID': reward_count-i,
-            'Amount': reward_amount,
-            'Date': reward_timestamp_dt,
-            'AZERO/USDT': azero,
-            'USDT/EUR': usdt,
-            'Block': reward_block,
-            'EventID': reward_eventid,
-            'HASH': reward_hash,
-            'URL': reward_url
-        }
+            ### Format the data for the JSON-File
+            data = {
+                'ID': reward_count-i,
+                'Amount': reward_amount,
+                'Date': reward_timestamp_dt,
+                'AZERO/USDT': azero,
+                'USDT/EUR': usdt,
+                'Block': reward_block,
+                'EventID': reward_eventid,
+                'HASH': reward_hash,
+                'URL': reward_url
+            }
 
-        results.insert(0, data)
-        i = i + 1
+            results.insert(0, data)
+            i = i + 1
 
 ### End of magic ############################################################## 
 

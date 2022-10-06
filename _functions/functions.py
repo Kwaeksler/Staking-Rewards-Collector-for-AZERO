@@ -19,7 +19,11 @@ def checkAmount(amount):
         amount = (amount - amount % 10) // 10
 
     # Länge überprüfen und Trennzeichen in die Liste einfügen
-    if len(digits) == 12:
+    if len(digits) == 10:
+        digits.insert(0, "0"+".00")
+    elif len(digits) == 11:
+        digits.insert(0, "0"+".0")
+    elif len(digits) == 12:
         digits.insert(0, "0"+".")
     elif len(digits) == 13:
         digits.insert(1, ".")
