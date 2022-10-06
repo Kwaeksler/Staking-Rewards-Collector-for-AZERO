@@ -1,7 +1,7 @@
 <a name="English"/><br />
 # Staking-Rewards-Collector for Aleph Zero
 Go to german installation guide: [GER](#German)  
-### Inhaltsverzeichnis
+### Table of contents
 1. [Description](#Description)  
 2. [Requirements](#Requirements)
 3. [Installation](#InstallationEN)
@@ -9,6 +9,7 @@ Go to german installation guide: [GER](#German)
 5. [Execution](#Execution)
 6. [Implementation in MS Excel (Office365)](#ExcelImplementation)
 7. [Refresh Data](#RefreshData)
+8. [Automatization](#Automatization)
 
  
 <a name="Description"/><br />
@@ -21,18 +22,33 @@ The Staking-Rewards-Collector creates a report (JSON file) with all staking rewa
 <a name="Requirements"/><br />
 
 ## Requirements
+The Staking-Rewards-Collector is written in Pyhton. Pyhton must be installed on the end device to run:
+### Python - Installation
+#### MS Windows 10
+Download Python3: `https://www.python.org/downloads`<br />
+Launch the installer - Important:<br />
+Activate the checkmark at `Add Python3 to PATH`<br />
+Disable the maximum path length after the installation by clicking `Disable path length limit`<br />
+#### MacOS (Monterey)
+Here is a guide for the installation:
+`https://techsviewer.com/how-to-install-python-on-mac`
 
-#### Python - Installation
-The Staking-Rewards-Collector is written in Pyhton. Phyton must be installed on the end device to run:
-`https://www.python.org/downloads`
+<br /><br />
+### Python - Packages
+For the HTTP/HTTPS requests, the Pyhton package "Requests" is also required.
 
-#### Python - Packages
-For the HTTP/HTTPS queries the Pyhton package "Requests" is additionally required, installation under Windows:
+#### MS Windows 10
 ```
 WIN + R
 cmd.exe
 pip install requests
 ```
+#### MacOS (Monterey)
+```
+Open Terminal
+pip3 install requests
+```
+
 <a name="InstallationEN"/><br />
 
 ## Installation of the Staking-Rewards-Collector
@@ -73,9 +89,14 @@ Debug | `True` <br /> `False` | *`True:` The terminal window remains open after 
 <a name="Execution"/><br />
 
 ## Execution
-The program can be executed by double-clicking on the file `StakingAzero.py`. 
+#### MS Windows 10
+If the PATH variable is set correctly, the program can be executed by double-clicking on the file `StakingAzero.py`
 <br />
 Alternatively via command line: `py StakingAzero.py`
+#### MacOS (Monterey)
+Right click on the file `StakingAzero.py` > `Open with ...` > `Python Launcher 3`
+<br />
+Alternatively via command line: `python3 StakingAzero.py`
 
 <a name="ExcelImplementation"/><br />
 
@@ -104,6 +125,15 @@ Running the `StakingAzero.py` file will update the .JSON file.
 <br />
 Then, in Microsoft Excel, the previously inserted table can be updated via `Data` > `Update all`.
 
+<a name="Automatization"/><br />
+
+## Automatization
+The query to Subscan.io as well as the update of the data in MS Excel can be fully automated. In the query properties in MS Excel, the checkbox `Update when file is opened` can be set for this purpose:
+
+![grafik](https://user-images.githubusercontent.com/22911401/174743096-604c6803-a9d5-474f-8229-74dd331328eb.png)
+
+The automatic execution of the script can be implemented under Windows via the task scheduling: e.g. with a trigger on the user logon.
+
 <br />
 <hr style="border:2px solid gray">
 <br /><br /><br /><br />
@@ -119,6 +149,7 @@ Go to english installation guide: [ENG](#English)
 5. [Ausführung](#Ausführung)
 6. [Implementierung in MS Excel (Office365)](#ExcelImplementierung)
 7. [Daten aktualisieren](#DatenAktualisieren)
+8. [Automatisierung](#Automatisierung)
 
  
 <a name="Beschreibung"/><br />
@@ -131,18 +162,32 @@ Der Staking-Rewards-Collector erstellt ein Report (JSON-Datei) mit allen Staking
 <a name="Voraussetzungen"/><br />
 
 ## Voraussetzungen
+Der Staking-Rewards-Collector ist in Pyhton programmiert, Python muss zur Ausführung auf dem Endgerät installiert sein.
+### Python - Installation
+#### MS Windows 10
+Download Python3: `https://www.python.org/downloads`<br />
+Starte den Installer - Wichtig:<br />
+Aktiviere den Haken bei `Add Python3 to PATH`<br />
+Deaktivere nach der Installation die maximale Pfadlänge durch klicken auf `Disable path length limit`<br />
+#### MacOS (Monterey)
+Hier eine Anleitung für die Installation:
+`https://techsviewer.com/how-to-install-python-on-mac`
 
-#### Python - Installation
-Der Staking-Rewards-Collector ist in Pyhton programmiert, Phyton muss zur Ausführung auf dem Endgerät installiert sein:
-`https://www.python.org/downloads`
-
-#### Python - Packages
-Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt, Installation unter Windows:
+<br /><br />
+### Python - Packages
+Für die HTTP/HTTPS-Abfragen wird zusätzlich das Pyhton-Paket "Requests" benötigt.
+#### MS Windows 10
 ```
 WIN + R
 cmd.exe
 pip install requests
 ```
+#### MacOS (Monterey)
+```
+Open Terminal
+pip3 install requests
+```
+
 <a name="Installation"/><br />
 
 ## Installation des Staking-Rewards-Collectors
@@ -183,9 +228,15 @@ Debug | `True` <br /> `False` | *`True:` Das Terminal-Fenster bleibt nach Beendi
 <a name="Ausführung"/><br />
 
 ## Ausführung
-Das Programm kann durch einen Doppelklick auf die Datei `StakingAzero.py` ausgeführt werden. 
+#### MS Windows 10
+Wenn die PATH-Variable korrekt gesetzt wurde, kann das Programm durch einen Doppelklick auf die Datei `StakingAzero.py` ausgeführt werden. 
 <br />
 Alternativ über die Kommandozeile: `py StakingAzero.py`
+#### MacOS (Monterey)
+Rechtsklick auf die Datei `StakingAzero.py` > `Öffnet mit ...` > `Python Launcher 3`
+<br />
+Alternativ über die Kommandozeile: `python3 StakingAzero.py`
+
 
 <a name="ExcelImplementierung"/><br />
 
@@ -213,4 +264,14 @@ Der Dialog kann durch Klick auf die Schaltfläche `Schließen & laden` beendet w
 Durch das Ausführen der `StakingAzero.py`-Datei wird die .JSON-Datei aktualisiert. 
 <br />
 Anschließend kann in Microsoft Excel die vorher eingefügte Tabelle über `Daten` > `Alle Aktualisieren` aktualisiert werden.
+
+<a name="Automatisierung"/><br />
+
+## Automatisierung
+Die Abfrage an Subscan.io sowie die Aktualisierung der Daten in MS Excel lässt sich vollständig automatisieren. In den Abfrage-Eigenschaften in MS Excel kann beispielsweise der Haken bei `Aktualisieren beim Öffnen der Datei` gesetzt werden:
+
+![grafik](https://user-images.githubusercontent.com/22911401/174743096-604c6803-a9d5-474f-8229-74dd331328eb.png)
+
+Die automatische Ausführung des Proramms kann unter Windows beispielsweise über die Aufgabenplanung umgesetzt werden: z.B. mit einem Trigger auf die Benutzeranmeldung.
+
 
