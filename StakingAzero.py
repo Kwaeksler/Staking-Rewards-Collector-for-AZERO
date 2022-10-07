@@ -21,10 +21,18 @@ em = 0
 ### Configuration #############################################################
 API_Key = ""
 Wallet_Address = ""
-File_Name = 'Rewards'       # Without file extension - Example: 'Rewards'
-Prices = 'Fast'        	    # Possible values: 'Fast' or 'Accurate' or 'No'
-Only_Updates = True         # Possible values: True or False
-Debug = True                # Possible values: True or False
+File_Name = 'Rewards'                           # Without file extension - Example: 'Rewards'
+Prices = 'Fast'        	                        # Possible values: 'Fast' or 'Accurate' or 'No'
+Only_Updates = True                             # Possible values: True or False
+Debug = True                                    # Possible values: True or False
+###############################################################################
+### CoinTracking Configuration: ###############################################
+###############################################################################
+CointrackingCSV = True                          # Possible values: True or False
+CSV_File_Name = 'Azero_Rewards_Cointracking'    # Without file extension - Example: 'Rewards_Cointracking'
+CT_Exchange = "Aleph Zero Rewards"              # Optional column for Import
+CT_TradeGroup = ""                              # Optional column for Import
+CT_Comment = "Staking Reward"                   # Optional column for Import
 ###############################################################################
 
 ### Check Configuration
@@ -56,6 +64,7 @@ if not (Only_Updates == True or Only_Updates == False):
 print(f"\nStatus: Die Konfiguration wurde erfolgreich überprüft, das Skript wird ausgeführt ...\n")
 URL = "https://alephzero.api.subscan.io/api/scan/account/reward_slash"
 File_Name = File_Name + ".json"
+CSV_File_Name = CSV_File_Name + ".csv"
 
 headers = CaseInsensitiveDict()
 headers["Content-Type"] = "application/json"
@@ -387,11 +396,48 @@ fileexists = os.path.exists(File_Name)
 
 if fileexists == True:
     if em == 1:
-        print(f"Status: Es sind keine neuen Datensätze vorhanden, das Skript wurde ohne Änderungen beendet")
+        print(f"Status: Es sind keine neuen Datensätze vorhanden, es wurden keine Änderungen an der Datei ({File_Name}) durchgeführt")
     else:
-        print(f"Status: Das Skript wurde erfolgreich beendet, die Datei ({File_Name}) wurde erstellt bzw. aktualisiert")
+        print(f"Status: Die Datei ({File_Name}) wurde erfolgreich erstellt bzw. aktualisiert")
 else:
     print(f"\nFehler: Die Datei {File_Name} konnte nicht erstellt bzw. aktualisiert werden, bitte erneut versuchen")
+
+### Creating a CSV-File for https://cointracking.info/import/import_csv/
+if CointrackingCSV == True:
+    f = open (File_Name, "r")
+    file_data = json.loads(f.read())
+    f.close()
+
+    lastID = file_data[-1]['ID']
+    CSVHeader = '"Type", "Buy Amount", "Buy Currency", "Sell Amount", "Sell Currency", "Fee", "Fee Currency", "Exchange", "Trade-Group", "Comment", "Date", "Tx-ID"'
+
+    fileexists = os.path.exists(CSV_File_Name)
+    if fileexists == True:
+        os.remove(CSV_File_Name)
+ 
+    i = 0
+    with open(CSV_File_Name,'a') as file:
+        while i <= lastID-1:
+            if i == 0:
+                file.write(CSVHeader)
+
+            CSVLine = f'"Staking", "{file_data[i]["Amount"]}", "AZERO", "", "", "", "{CT_TradeGroup}", "{CT_Exchange}", "", "{CT_Comment}", "{file_data[i]["Date"]}", "{file_data[i]["URL"]}"'
+            file.write("\n" + CSVLine)
+
+            i = i + 1
+    
+    file.close()
+
+    fileexists = os.path.exists(CSV_File_Name)
+    if fileexists == True:
+        print(f"\nStatus: Die CSV-Datei ({CSV_File_Name}) wurde für den CoinTracking-Import erstellt bzw. aktualisiert")
+
+else:
+    fileexists = os.path.exists(CSV_File_Name)
+    if fileexists == True:
+        os.remove(CSV_File_Name)
+    
+################################################################
 
 ### Calculate runtime
 t2 = time.perf_counter()

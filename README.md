@@ -15,7 +15,7 @@ Go to german installation guide: [GER](#German)
 <a name="Description"/><br />
 
 ## Description
-The Staking-Rewards-Collector creates a report (JSON file) with all staking rewards information for Aleph Zero. Information is retrieved via the API from Subscan.io. Optionally, prices can be included in the JSON file, which are queried via the API from CoinGecko.com. The goal is to integrate the JSON file into Microsoft Excel.
+The Staking-Rewards-Collector creates a report (JSON file) with all staking rewards information for Aleph Zero. Information is retrieved via the API from Subscan.io. Optionally, prices can be included in the JSON file, which are queried via the API from CoinGecko.com. The goal is to integrate the JSON file into Microsoft Excel. Furthermore, a CSV file can be created to upload the reward information to Cointracking.
 
 ![grafik](https://user-images.githubusercontent.com/22911401/173590784-0434f89d-3959-423e-8e5a-971885fac5dd.png)
 
@@ -86,6 +86,20 @@ Debug | `True` <br /> `False` | *`True:` The terminal window remains open after 
 
 (*By using the `Only_Updates` mode the prices can be adjusted manually in the JSON file if the prices should be too inaccurate. The manual changes will not be overwritten in this mode when run again.*)
 
+<br />
+
+Optionally, an additional CSV file can be created to upload the reward information to https://cointracking.info:
+
+Variable | Required | Explanation
+--- | --- | ---
+CointrackingCSV | `Optional` | *`True:` Additional CSV file is created/updated<br />`False:`File will not be created*
+CSV_File_Name | `Optional` | *Specification of any string for the file name, without file extension! Default: `Azero_Rewards_Cointracking`*
+CT_Exchange | `Optional` | *Optional field for specifying additional information for the import*
+CT_TradeGroup | `Optional` | *Optional field for specifying additional information for the import*
+CT_Comment | `Optional` | *Optional field for specifying additional information for the import*
+
+(*The created CSV file can be uploaded at https://cointracking.info/import/import_csv/*)
+
 <a name="Execution"/><br />
 
 ## Execution
@@ -155,7 +169,7 @@ Go to english installation guide: [ENG](#English)
 <a name="Beschreibung"/><br />
 
 ## Beschreibung
-Der Staking-Rewards-Collector erstellt ein Report (JSON-Datei) mit allen Staking-Reward-Informationen für Aleph Zero. Informationen werden über die API von Subscan.io abgefragt. Optional können Preise mit in die JSON-Datei aufgenommen werden, welche über die API von CoinGecko.com abgefragt werden. Ziel ist die Einbindung der JSON-Datei in Microsoft Excel, um dort einen Steuerbericht zu erstellen.
+Der Staking-Rewards-Collector erstellt ein Report (JSON-Datei) mit allen Staking-Reward-Informationen für Aleph Zero. Informationen werden über die API von Subscan.io abgefragt. Optional können Preise mit in die JSON-Datei aufgenommen werden, welche über die API von CoinGecko.com abgefragt werden. Ziel ist die Einbindung der JSON-Datei in Microsoft Excel, um dort einen Steuerbericht zu erstellen. Des Weiteren kann eine CSV-Datei erstellt werden, um die Reward-Informationen auf Cointracking hochzuladen.
 
 ![grafik](https://user-images.githubusercontent.com/22911401/173590854-4cc92d73-8ffd-4654-8437-ad55a4a125e5.png)
 
@@ -224,6 +238,20 @@ Debug | `True` <br /> `False` | *`True:` Das Terminal-Fenster bleibt nach Beendi
 (*Die freie API von CoinGecko.com erlaubt nur ca. 50 Abfragen pro Minute. Wird die Variable `Prices` auf `Accurate` gesetzt, wird das Programm öfter untebrochen, da dort wesentlich mehr Informationen abgerufen werden.*)
 
 (*Durch den `Only_Updates`-Modus können die Preise manuell in der JSON-Datei angepasst werden, falls die Preise zu ungenau sein sollten. Die manuellen Änderungen werden in diesem Modus bei erneuter Ausführung nicht überschrieben.*)
+
+<br />
+
+Optional kann eine zusätzliche CSV-Datei erstellt werden, um die Reward-Informationen auf https://cointracking.info hochzuladen:
+
+Variable | Notwendigkeit | Erläuterung
+--- | --- | ---
+CointrackingCSV | `Optional` | *`True:` Zusätzliche CSV-Datei wird erstellt bzw. aktualisiert<br />`False:`Datei wird nicht erstellt*
+CSV_File_Name | `Optional` | *Angabe einer beliebigen Zeichenkette für den Dateinamen, ohne Dateiendung! Default: `Azero_Rewards_Cointracking`*
+CT_Exchange | `Optional` | *Bliebige Angabe einer Zeichenkette für die Verwendung weiterer Informationen beim Import*
+CT_TradeGroup | `Optional` | *Bliebige Angabe einer Zeichenkette für die Verwendung weiterer Informationen beim Import*
+CT_Comment | `Optional` | *Bliebige Angabe einer Zeichenkette für die Verwendung weiterer Informationen beim Import*
+
+(*Die erstellte CSV-Datei kann unter https://cointracking.info/import/import_csv/ hochgeladen werden*)
 
 <a name="Ausführung"/><br />
 
