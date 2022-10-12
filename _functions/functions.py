@@ -85,9 +85,11 @@ def getAccurateHistoryPrice(CoinID, Date_Unix, targetCurrency):
     i = 0
     price = 0
 
-    while i < count_prices:
-        price = price + cgData['prices'][i][1]
-        i = i + 1
+    if count_prices != 0:
+        while i < count_prices:
+            price = price + cgData['prices'][i][1]
+            i = i + 1
 
-    price = price / i
+        price = price / i
+
     return price

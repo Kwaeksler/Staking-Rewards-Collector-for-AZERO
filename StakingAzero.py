@@ -166,7 +166,16 @@ if Only_Updates == True and fileexists == True:
                                 else:
                                     usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
                                     azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
-                                    print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                                    
+                                    if usdt == 0 or azero == 0:
+                                        datum = reward_timestamp_dt
+                                        datum = datum.strftime('%d-%m-%Y')
+                                        usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                                        azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                                        print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {nextID} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
+                                    else:
+                                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {nextID} wurden abgefragt\n")
+
                             else:
                                 usdt = 0
                                 azero = 0
@@ -219,7 +228,16 @@ if Only_Updates == True and fileexists == True:
             else:
                 usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
                 azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
-                print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {nextID} wurden abgefragt\n")
+
+                if usdt == 0 or azero == 0:
+                    datum = reward_timestamp_dt
+                    datum = datum.strftime('%d-%m-%Y')
+                    usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                    azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                    print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {nextID} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
+                else:
+                    print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {nextID} wurden abgefragt\n")
+
         else:
             usdt = 0
             azero = 0
@@ -312,7 +330,15 @@ else:
                     else:
                         usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
                         azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
-                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+                        if usdt == 0 or azero == 0:
+                            datum = reward_timestamp_dt
+                            datum = datum.strftime('%d-%m-%Y')
+                            usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                            azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                            print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {RewardID} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
+                        else:
+                            print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
+
                 else:
                     usdt = 0
                     azero = 0
@@ -362,7 +388,16 @@ else:
                 else:
                     usdt = getAccurateHistoryPrice('tether', reward_timestamp_unix, 'eur')
                     azero = getAccurateHistoryPrice('aleph-zero', reward_timestamp_unix, 'usd')
-                    print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
+
+                    if usdt == 0 or azero == 0:
+                        datum = reward_timestamp_dt
+                        datum = datum.strftime('%d-%m-%Y')
+                        usdt = getSimpleHistoryPrice('tether', datum, 'eur')
+                        azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
+                        print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {reward_count-i} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
+                    else:
+                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {reward_count-i} wurden abgefragt\n")
+
             else:
                 usdt = 0
                 azero = 0
