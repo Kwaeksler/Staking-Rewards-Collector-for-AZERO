@@ -172,9 +172,9 @@ if Only_Updates == True and fileexists == True:
                                         datum = datum.strftime('%d-%m-%Y')
                                         usdt = getSimpleHistoryPrice('tether', datum, 'eur')
                                         azero = getSimpleHistoryPrice('aleph-zero', datum, 'usd')
-                                        print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {nextID} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
+                                        print(f"Status: Es konnten keine 'Detailierten' Preise für Reward-ID: {RewardID} abgefragt werden, stattdessen wurden 'Einfache' Preise abgefragt\n")
                                     else:
-                                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {nextID} wurden abgefragt\n")
+                                        print(f"Status: 'Detailierte' Preise (USDT/EUR & AZERO/USD) für Reward-ID: {RewardID} wurden abgefragt\n")
 
                             else:
                                 usdt = 0
