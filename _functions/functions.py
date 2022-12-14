@@ -59,7 +59,10 @@ def getSimpleHistoryPrice(CoinID, Date, targetCurrency):
         req = requests.get(f"https://api.coingecko.com/api/v3/coins/{CoinID}/history?date={Date}", headers={'User-agent':'CGBot'})
 
     cgData = req.json()
-    price = cgData['market_data']['current_price'][targetCurrency]
+    if 'market_data' in cgData:
+        price = cgData['market_data']['current_price'][targetCurrency]
+    else:
+        price = 0
 
     return price
 
