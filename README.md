@@ -10,6 +10,7 @@ Go to german installation guide: [GER](#German)
 6. [Implementation in MS Excel (Office365)](#ExcelImplementation)
 7. [Refresh Data](#RefreshData)
 8. [Automatization](#Automatization)
+9. [Donation](#Donation)
 
  
 <a name="Description"/><br />
@@ -164,6 +165,7 @@ Go to english installation guide: [ENG](#English)
 6. [Implementierung in MS Excel (Office365)](#ExcelImplementierung)
 7. [Daten aktualisieren](#DatenAktualisieren)
 8. [Automatisierung](#Automatisierung)
+9. [Donation](#Donation)
 
  
 <a name="Beschreibung"/><br />
@@ -303,3 +305,8 @@ Die Abfrage an Subscan.io sowie die Aktualisierung der Daten in MS Excel lässt 
 Die automatische Ausführung des Proramms kann unter Windows beispielsweise über die Aufgabenplanung umgesetzt werden: z.B. mit einem Trigger auf die Benutzeranmeldung.
 
 
+
+<a name="Donation"/><br />
+
+## Donation
+Buy me a coffee <3 AZERO: 5CdDLaALf21truuLH4ygnBgCBEQJTychaPKfGrqCVPjB3iVA
