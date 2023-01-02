@@ -309,4 +309,4 @@ Die automatische Ausführung des Proramms kann unter Windows beispielsweise übe
 <a name="Donation"/><br />
 
 ## Donation
-Buy me a coffee <3 AZERO: 5CdDLaALf21truuLH4ygnBgCBEQJTychaPKfGrqCVPjB3iVA
+Buy me a coffee :heart: AZERO: 5CdDLaALf21truuLH4ygnBgCBEQJTychaPKfGrqCVPjB3iVA
