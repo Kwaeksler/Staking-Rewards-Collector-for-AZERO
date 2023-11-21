@@ -58,6 +58,11 @@ def getSimpleHistoryPrice(CoinID, Date, targetCurrency):
         print("\nStatus: Das Skript wird fortgesetzt ...\n")
         req = requests.get(f"https://api.coingecko.com/api/v3/coins/{CoinID}/history?date={Date}", headers={'User-agent':'CGBot'})
 
+    while 500 <= req.status_code <= 599:
+        print(f"\nStatus: CoinGecko meldet einen internen Serverfehler (Statuscode: {req.status_code}) - Das Srkipt wird für 15 Sekunden pausiert und anschließend fortgesetzt ...")
+        time.sleep(int(15))
+        req = requests.get(f"https://api.coingecko.com/api/v3/coins/{CoinID}/history?date={Date}", headers={'User-agent':'CGBot'})
+
     cgData = req.json()
     if 'market_data' in cgData:
         price = cgData['market_data']['current_price'][targetCurrency]
